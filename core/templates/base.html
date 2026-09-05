@@ -1,0 +1,82 @@
+{% load static %}<!DOCTYPE html>
+<html lang="sq">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{{ page_title|default:'Sistemi Genit' }}{% endblock %} — Sistemi Genit</title>
+  <link rel="stylesheet" href="{% static 'css/app.css' %}">
+</head>
+<body>
+<div class="app-shell">
+  {% if user.is_authenticated %}
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-mark">G</div>
+      <div><strong>Sistemi Genit</strong><span>Cloud ERP</span></div>
+    </div>
+    <nav>
+      <section class="nav-group">
+        <h4>Cloud Core</h4>
+        <a class="nav-item" href="{% url 'dashboard' %}">Dashboard</a>
+        <a class="nav-item" href="{% url 'company_list' %}">Kompanitë</a>
+        <a class="nav-item" href="{% url 'warehouse_list' %}">Magazinat</a>
+        {% if user.is_admin %}<a class="nav-item" href="{% url 'user_list' %}">Përdoruesit</a>{% endif %}
+        {% if user.is_admin or user.role == 'AUDITOR' %}<a class="nav-item" href="{% url 'audit_list' %}">Audit Log</a>{% endif %}
+      </section>
+      <section class="nav-group">
+        <h4>Regjistra</h4>
+        <a class="nav-item" href="{% url 'product_list' %}">Artikujt</a>
+        <a class="nav-item" href="{% url 'supplier_list' %}">Furnitorët</a>
+        <a class="nav-item" href="{% url 'customer_list' %}">Klientët</a>
+      </section>
+      <section class="nav-group">
+        <h4>Blerje &amp; Peshim</h4>
+        <a class="nav-item" href="{% url 'weight_list' %}">Formulari i Peshave</a>
+        <a class="nav-item" href="{% url 'document_list' 'PURCHASE_RFQ' %}">Kërkesa për Ofertë</a>
+        <a class="nav-item" href="{% url 'document_list' 'PURCHASE_ORDER' %}">Porosi Blerjeje</a>
+        <a class="nav-item" href="{% url 'document_list' 'PURCHASE_RECEIPT' %}">Pranime</a>
+        <a class="nav-item" href="{% url 'document_list' 'PURCHASE_INVOICE' %}">Fatura Blerjeje</a>
+      </section>
+      <section class="nav-group">
+        <h4>Shitje &amp; Magazinë</h4>
+        <a class="nav-item" href="{% url 'document_list' 'SALES_QUOTE' %}">Oferta Shitjeje</a>
+        <a class="nav-item" href="{% url 'document_list' 'SALES_ORDER' %}">Porosi Shitjeje</a>
+        <a class="nav-item" href="{% url 'document_list' 'DELIVERY_NOTE' %}">Fletë-Dalje</a>
+        <a class="nav-item" href="{% url 'document_list' 'SALES_INVOICE' %}">Fatura Shitjeje</a>
+        <a class="nav-item" href="{% url 'stock_list' %}">Stoku</a>
+      </section>
+    </nav>
+    <div class="sidebar-footer">Versioni Cloud ERP 2.0</div>
+  </aside>
+  {% endif %}
+
+  <main class="main">
+    {% if user.is_authenticated %}
+    <header class="topbar">
+      <div class="topbar-title">
+        <div><h1>{{ page_title|default:'Sistemi Genit' }}</h1></div>
+      </div>
+      <div class="topbar-actions">
+        <div class="user-chip">
+          <span><strong>{{ user.full_name|default:user.username }}</strong><small>{{ user.get_role_display }}</small></span>
+        </div>
+        <a class="btn secondary small" href="{% url 'logout' %}">Dil</a>
+      </div>
+    </header>
+    {% endif %}
+
+    {% if messages %}
+    <div class="messages">
+      {% for m in messages %}
+        <div class="alert {{ m.tags }}">{{ m }}</div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="content">
+      {% block content %}{% endblock %}
+    </div>
+  </main>
+</div>
+</body>
+</html>

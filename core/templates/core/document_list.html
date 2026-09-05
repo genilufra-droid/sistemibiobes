@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card">
+  <div class="section-heading">
+    <div><h3>{{ doc_label }}</h3></div>
+    {% if user.is_write %}<a class="btn primary small" href="{% url 'document_create' doc_type %}">+ Dokument i ri</a>{% endif %}
+  </div>
+  {% if docs %}
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Nr.</th><th>Data</th><th>Partneri</th><th>Kompania</th><th>Totali</th><th>Statusi</th><th></th></tr></thead>
+      <tbody>
+        {% for d in docs %}
+        <tr>
+          <td>{{ d.document_no }}</td><td>{{ d.document_date|date:'d.m.Y' }}</td>
+          <td>{{ d.partner.name|default:'—' }}</td><td>{{ d.company.name }}</td>
+          <td>{{ d.total_amount }}</td>
+          <td><span class="status-chip {% if d.status == 'CONFIRMED' %}{% elif d.status == 'CANCELLED' %}off{% else %}draft{% endif %}">{{ d.get_status_display }}</span></td>
+          <td><a class="btn secondary small" href="{% url 'document_detail' d.id %}">Hap</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}<div class="empty">Nuk ka dokumente.</div>{% endif %}
+</div>
+{% endblock %}

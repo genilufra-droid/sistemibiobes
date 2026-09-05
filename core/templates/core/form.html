@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card">
+  <div class="section-heading">
+    <div><h3>{{ page_title }}</h3></div>
+  </div>
+  {% if form.errors %}<div class="form-errors">{{ form.non_field_errors }}{{ form.errors }}</div>{% endif %}
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-grid">
+      {% for field in form %}
+        <label class="{% if field.name in 'address,notes,companies,warehouses' %}wide{% endif %}">
+          {{ field.label }}
+          {{ field }}
+          {% if field.help_text %}<small class="muted">{{ field.help_text }}</small>{% endif %}
+          {% for e in field.errors %}<span style="color:var(--red)">{{ e }}</span>{% endfor %}
+        </label>
+      {% endfor %}
+    </div>
+    <div class="form-actions">
+      <button class="primary" type="submit">{{ submit|default:'Ruaj' }}</button>
+      <a class="btn secondary" href="javascript:history.back()">Anulo</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

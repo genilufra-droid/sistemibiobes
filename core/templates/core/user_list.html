@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card">
+  <div class="section-heading">
+    <div><h3>Përdoruesit dhe rolet</h3><p>Llogari individuale; lejet operative sipas roleve.</p></div>
+    <a class="btn primary small" href="{% url 'user_create' %}">+ Shto përdorues</a>
+  </div>
+  {% if users %}
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Emri</th><th>Username</th><th>Roli</th><th>Statusi</th></tr></thead>
+      <tbody>
+        {% for u in users %}
+        <tr>
+          <td>{{ u.full_name|default:u.username }}</td><td>{{ u.username }}</td>
+          <td>{{ u.get_role_display }}</td>
+          <td><span class="status-chip {% if not u.active %}off{% endif %}">{{ u.active|yesno:'Aktiv,Joaktiv' }}</span></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}<div class="empty">Nuk ka përdorues.</div>{% endif %}
+</div>
+{% endblock %}

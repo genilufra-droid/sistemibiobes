@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card">
+  <div class="section-heading">
+    <div><h3>Formulari i Peshave</h3><p>Pranimi i lëndës së parë me peshë.</p></div>
+    {% if user.is_write %}<a class="btn primary small" href="{% url 'weight_create' %}">+ Formular i ri</a>{% endif %}
+  </div>
+  {% if tickets %}
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Nr.</th><th>Data</th><th>Produkti</th><th>Furnitori</th><th>Pesha neto</th><th>Vlera</th><th>Statusi</th><th></th></tr></thead>
+      <tbody>
+        {% for t in tickets %}
+        <tr>
+          <td>{{ t.document_no }}</td><td>{{ t.document_date|date:'d.m.Y' }}</td>
+          <td>{{ t.product.name }}</td><td>{{ t.supplier.name|default:'—' }}</td>
+          <td>{{ t.accepted_weight }}</td><td>{{ t.total_value }}</td>
+          <td><span class="status-chip {% if t.status == 'CONFIRMED' %}{% elif t.status == 'CANCELLED' %}off{% else %}draft{% endif %}">{{ t.get_status_display }}</span></td>
+          <td>
+            {% if t.status == 'DRAFT' and user.is_write %}
+              <form method="post" action="{% url 'weight_confirm' t.id %}" style="display:inline">{% csrf_token %}
+                <button class="success small" type="submit">Konfirmo</button>
+              </form>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}<div class="empty">Nuk ka formulare peshe.</div>{% endif %}
+</div>
+{% endblock %}

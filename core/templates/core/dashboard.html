@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="hero-card">
+  <div>
+    <p class="eyebrow">CLOUD ERP • OPERACIONET</p>
+    <h2>Platforma qendrore është aktive</h2>
+    <p>Regjistrat, peshimi, blerjet, shitjet dhe stoku me transaksione të sigurta.</p>
+  </div>
+</div>
+
+<div class="kpi-grid">
+  <article class="kpi"><span>Kompanitë</span><strong>{{ companies|length }}</strong></article>
+  <article class="kpi"><span>Magazinat</span><strong>{{ warehouses|length }}</strong></article>
+  <article class="kpi"><span>Përdorues aktivë</span><strong>{{ active_users }}</strong></article>
+  <article class="kpi"><span>Veprime sot</span><strong>{{ actions_today }}</strong></article>
+  <article class="kpi"><span>Artikuj</span><strong>{{ products }}</strong></article>
+  <article class="kpi"><span>Stok total</span><strong>{{ total_stock }}</strong></article>
+</div>
+
+<div class="card">
+  <div class="section-heading">
+    <div><h3>Veprimet e fundit (Audit Log)</h3><p>Historik i pandryshueshëm i veprimeve.</p></div>
+    <a class="btn secondary small" href="{% url 'audit_list' %}">Shiko të gjitha</a>
+  </div>
+  {% if recent_audit %}
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Data/Ora</th><th>Përdoruesi</th><th>Veprimi</th><th>Objekti</th></tr></thead>
+      <tbody>
+        {% for log in recent_audit %}
+        <tr>
+          <td>{{ log.created_at|date:'d.m.Y H:i' }}</td>
+          <td>{{ log.user.username|default:'Sistem' }}</td>
+          <td>{{ log.action }}</td>
+          <td>{{ log.entity_type }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty">Nuk ka veprime ende.</div>
+  {% endif %}
+</div>
+{% endblock %}

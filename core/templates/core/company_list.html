@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card">
+  <div class="section-heading">
+    <div><h3>Kompanitë</h3><p>Çdo dokument izolohet sipas organizatës dhe kompanisë.</p></div>
+    {% if user.is_super_admin %}<a class="btn primary small" href="{% url 'company_create' %}">+ Shto kompani</a>{% endif %}
+  </div>
+  {% if companies %}
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Kompania</th><th>NIPT</th><th>Monedha</th><th>Statusi</th></tr></thead>
+      <tbody>
+        {% for c in companies %}
+        <tr>
+          <td>{{ c.name }}</td><td>{{ c.nipt|default:'—' }}</td><td>{{ c.currency }}</td>
+          <td><span class="status-chip {% if not c.active %}off{% endif %}">{{ c.active|yesno:'Aktive,Joaktive' }}</span></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}<div class="empty">Nuk ka kompani.</div>{% endif %}
+</div>
+{% endblock %}

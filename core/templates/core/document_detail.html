@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card">
+  <div class="section-heading">
+    <div><h3>{{ doc.get_doc_type_display }} — {{ doc.document_no }}</h3>
+      <p>Data: {{ doc.document_date|date:'d.m.Y' }} • Kompania: {{ doc.company.name }} • Partneri: {{ doc.partner.name|default:'—' }}</p>
+    </div>
+    <div style="display:flex;gap:8px">
+      {% if doc.status == 'DRAFT' and user.is_write %}
+        <form method="post" action="{% url 'document_confirm' doc.id %}">{% csrf_token %}<button class="success" type="submit">Konfirmo</button></form>
+        <form method="post" action="{% url 'document_cancel' doc.id %}">{% csrf_token %}<button class="danger" type="submit">Anulo</button></form>
+      {% endif %}
+    </div>
+  </div>
+  <p><span class="status-chip {% if doc.status == 'CONFIRMED' %}{% elif doc.status == 'CANCELLED' %}off{% else %}draft{% endif %}">{{ doc.get_status_display }}</span></p>
+
+  {% if doc.items %}
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Artikulli</th><th>Përshkrimi</th><th>Sasia</th><th>Çmimi</th><th>Neto</th><th>TVSH</th><th>Totali</th></tr></thead>
+      <tbody>
+        {% for i in doc.items.all %}
+        <tr>
+          <td>{{ i.product.code }}</td><td>{{ i.description }}</td>
+          <td>{{ i.quantity }} {{ i.unit }}</td><td>{{ i.unit_price }}</td>
+          <td>{{ i.line_net }}</td><td>{{ i.line_vat }}</td><td>{{ i.line_total }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+      <tfoot>
+        <tr><th colspan="4">Totalet</th><th>{{ doc.total_net }}</th><th>{{ doc.total_vat }}</th><th>{{ doc.total_amount }}</th></tr>
+      </tfoot>
+    </table>
+  </div>
+  {% else %}<div class="empty">Nuk ka rreshta ende.</div>{% endif %}
+
+  {% if doc.status == 'DRAFT' and user.is_write %}
+  <div class="card mt">
+    <h3>Shto rresht</h3>
+    <form method="post" action="{% url 'document_add_item' doc.id %}">
+      {% csrf_token %}
+      <div class="form-grid">
+        {% for field in item_form %}
+          <label class="{% if field.name == 'description' %}wide{% endif %}">{{ field.label }}{{ field }}</label>
+        {% endfor %}
+      </div>
+      <div class="form-actions"><button class="primary" type="submit">Shto rresht</button></div>
+    </form>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

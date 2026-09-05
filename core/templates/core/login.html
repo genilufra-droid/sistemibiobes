@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Hyr në sistem{% endblock %}
+{% block content %}
+<div class="auth-wrap">
+  <div class="auth-card">
+    <h2>Hyr në sistem</h2>
+    <p class="muted">Përdor llogarinë individuale. Të gjitha veprimet regjistrohen në Audit Log.</p>
+    {% if messages %}{% for m in messages %}<div class="alert {{ m.tags }}">{{ m }}</div>{% endfor %}{% endif %}
+    <form method="post">
+      {% csrf_token %}
+      <label>Username ose email <input type="text" name="username" required autofocus></label>
+      <label>Fjalëkalimi <input type="password" name="password" required></label>
+      <button class="primary" type="submit">Hyr</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

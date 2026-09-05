@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Konfigurimi i parë{% endblock %}
+{% block content %}
+<div class="auth-wrap">
+  <div class="auth-card">
+    <h2>Konfigurimi i parë</h2>
+    <p class="muted">Krijo organizatën, kompaninë, magazinën dhe Super Administratorin. Ky ekran bllokohet pas ruajtjes së parë.</p>
+    {% if form.errors %}<div class="form-errors">{{ form.errors }}</div>{% endif %}
+    <form method="post">
+      {% csrf_token %}
+      <label>Organizimi {{ form.organization_name }}</label>
+      <label>Kompania {{ form.company_name }}</label>
+      <label>NIPT {{ form.company_nipt }}</label>
+      <label>Magazina e parë {{ form.warehouse_name }}</label>
+      <label>Emri i administratorit {{ form.admin_name }}</label>
+      <label>Username {{ form.username }}</label>
+      <label>Email {{ form.email }}</label>
+      <label>Fjalëkalimi (min. 8 karaktere) {{ form.password }}</label>
+      <button class="primary" type="submit">Krijo sistemin</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

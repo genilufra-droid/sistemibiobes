@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card">
+  <div class="section-heading">
+    <div><h3>Audit Log</h3><p>Veprimet ruhen në server dhe nuk varen nga browser-i.</p></div>
+  </div>
+  <form method="get" style="margin-bottom:16px">
+    <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Kërko veprim, përdorues…" style="padding:9px 12px;border:1px solid var(--border);border-radius:8px;width:100%;max-width:360px">
+  </form>
+  {% if logs %}
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Data/Ora</th><th>Përdoruesi</th><th>Veprimi</th><th>Objekti</th><th>Kompania</th></tr></thead>
+      <tbody>
+        {% for log in logs %}
+        <tr>
+          <td>{{ log.created_at|date:'d.m.Y H:i' }}</td>
+          <td>{{ log.user.username|default:'Sistem' }}</td>
+          <td>{{ log.action }}</td>
+          <td>{{ log.entity_type }}</td>
+          <td>{{ log.company.name|default:'—' }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}<div class="empty">Nuk ka regjistrime.</div>{% endif %}
+</div>
+{% endblock %}

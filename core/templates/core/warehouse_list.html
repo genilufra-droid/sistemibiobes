@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card">
+  <div class="section-heading">
+    <div><h3>Magazinat</h3><p>Aksesi dhe stoku kontrollohen sipas magazinës.</p></div>
+    {% if user.is_admin %}<a class="btn primary small" href="{% url 'warehouse_create' %}">+ Shto magazinë</a>{% endif %}
+  </div>
+  {% if warehouses %}
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Kompania</th><th>Magazina</th><th>Kodi</th><th>Adresa</th><th>Statusi</th></tr></thead>
+      <tbody>
+        {% for w in warehouses %}
+        <tr>
+          <td>{{ w.company.name }}</td><td>{{ w.name }}</td><td>{{ w.code }}</td>
+          <td>{{ w.address|default:'—' }}</td>
+          <td><span class="status-chip {% if not w.active %}off{% endif %}">{{ w.active|yesno:'Aktive,Joaktive' }}</span></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}<div class="empty">Nuk ka magazina.</div>{% endif %}
+</div>
+{% endblock %}

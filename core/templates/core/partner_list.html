@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card">
+  <div class="section-heading">
+    <div><h3>{{ page_title }}</h3></div>
+    {% if user.is_write %}
+      <a class="btn primary small" href="{% if ptype == 'SUPPLIER' %}{% url 'supplier_create' %}{% else %}{% url 'customer_create' %}{% endif %}">+ Shto</a>
+    {% endif %}
+  </div>
+  {% if partners %}
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Emri</th><th>NIPT</th><th>Qyteti</th><th>Telefon</th><th>Kompania</th><th>Statusi</th></tr></thead>
+      <tbody>
+        {% for p in partners %}
+        <tr>
+          <td>{{ p.name }}</td><td>{{ p.nipt|default:'—' }}</td><td>{{ p.city|default:'—' }}</td>
+          <td>{{ p.phone|default:'—' }}</td><td>{{ p.company.name }}</td>
+          <td><span class="status-chip {% if not p.active %}off{% endif %}">{{ p.active|yesno:'Aktiv,Joaktiv' }}</span></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}<div class="empty">Nuk ka partnerë.</div>{% endif %}
+</div>
+{% endblock %}

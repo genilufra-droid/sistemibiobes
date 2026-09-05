@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card">
+  <div class="section-heading">
+    <div><h3>Stoku</h3><p>Gjendja aktuale sipas kompanisë, magazinës dhe artikullit.</p></div>
+  </div>
+  {% if rows %}
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Kompania</th><th>Magazina</th><th>Kodi</th><th>Artikulli</th><th>Sasia (bazë)</th></tr></thead>
+      <tbody>
+        {% for r in rows %}
+        <tr>
+          <td>{{ r.company__name }}</td><td>{{ r.warehouse__name }}</td>
+          <td>{{ r.product__code }}</td><td>{{ r.product__name }}</td>
+          <td>{{ r.quantity_stock }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}<div class="empty">Nuk ka lëvizje stoku ende. Konfirmo një formulë peshe ose dokument.</div>{% endif %}
+</div>
+{% endblock %}

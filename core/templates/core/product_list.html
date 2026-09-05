@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card">
+  <div class="section-heading">
+    <div><h3>Artikujt</h3><p>Regjistri i produkteve me çmime dhe njësi.</p></div>
+    {% if user.is_write %}<a class="btn primary small" href="{% url 'product_create' %}">+ Shto artikull</a>{% endif %}
+  </div>
+  {% if products %}
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Kodi</th><th>Emri</th><th>Kategoria</th><th>Kompania</th><th>Çmim blerje</th><th>Çmim shitje</th><th>Statusi</th></tr></thead>
+      <tbody>
+        {% for p in products %}
+        <tr>
+          <td>{{ p.code }}</td><td>{{ p.name }}</td>
+          <td>{{ p.category.name|default:'—' }}</td><td>{{ p.company.name }}</td>
+          <td>{{ p.purchase_price }}</td><td>{{ p.sale_price }}</td>
+          <td><span class="status-chip {% if not p.active %}off{% endif %}">{{ p.active|yesno:'Aktiv,Joaktiv' }}</span></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}<div class="empty">Nuk ka artikuj.</div>{% endif %}
+</div>
+{% endblock %}
