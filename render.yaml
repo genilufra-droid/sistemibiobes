@@ -13,7 +13,7 @@ services:
     name: genit-cloud
     runtime: python
     plan: free
-    buildCommand: "pip install -r requirements.txt && python manage.py makemigrations core --noinput && python manage.py migrate && python manage.py collectstatic --noinput"
+    buildCommand: "pip install -r requirements.txt && python manage.py makemigrations core --noinput && python manage.py migrate && python manage.py reset_admin && python manage.py collectstatic --noinput"
     startCommand: "gunicorn genit_cloud.wsgi:application --bind 0.0.0.0:$PORT --workers 2"
     healthCheckPath: /login/
     envVars:
@@ -29,3 +29,5 @@ services:
           property: connectionString
       - key: PYTHON_VERSION
         value: "3.11.9"
+      - key: DJANGO_ADMIN_USERNAME
+        value: "admin"
